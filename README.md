@@ -2,4 +2,4 @@
 
 ## Quiz
 
-Just a simple internet and computing Quiz to test your knowledge :nerd:
+Just a simple internet and computing Quiz to test your knowledge 
