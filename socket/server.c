@@ -25,6 +25,7 @@ int main() {
 
     socklen_t server_info_len = sizeof(server_info);
 
+	// enable reusing address
     if(setsockopt(s_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
         printf("Error while setting address for reuse\n");
         return -1;
@@ -43,7 +44,7 @@ int main() {
     }
 
     // int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
-    if (client = accept(s_socket, (struct sockaddr*)&server_info, &server_info_len) < 0) {
+    if ((client = accept(s_socket, (struct sockaddr*)&server_info, &server_info_len) < 0)) {
         printf("Error while accepting socket request\n");
         return -1;
     }
