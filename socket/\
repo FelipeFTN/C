@@ -1,0 +1,30 @@
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netinet/ip.h>
+#include <arpa/inet.h>
+#include <stdio.h>
+
+int main() {
+    struct sockaddr_in server_info = {};
+
+    server_info.sin_family = AF_INET;
+    server_info.sin_port = htons(1337);
+
+    int s_socket = socket(AF_INET, SOCK_STREAM, 0);
+    if (s_socket < 0) {
+        printf("Error while creating socket\n");
+        return -1;
+    }
+
+    socklen_t server_info_len = sizeof(server_info);
+    
+    // int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+    if (bind(s_socket, (struct sockaddr*)&server_info, server_info_len) < 0) {
+        printf("Error while binding socket\n");
+        return -1;
+    }
+
+    // int listen(int sockfd, int backlog);
+
+    return 0;
+}

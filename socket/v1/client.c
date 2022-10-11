@@ -15,7 +15,7 @@ int main() {
     my_addr.sin_port = htons(5100);
     my_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    int clientBind = bind(clientSock, const struct sockaddr *my_addr, socklen_t addrlen);
+    int clientBind = bind(clientSock, const struct sockaddr *my_addr, sizeof(my_addr));
     if (clientBind < 0) {
         printf("Error in binding\n");
         exit(1);
