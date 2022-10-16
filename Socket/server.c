@@ -4,14 +4,11 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 int main() {
     struct sockaddr_in server_info = {};
-
-    server_info.sin_family = AF_INET;
-    server_info.sin_addr.s_addr = INADDR_ANY;
-    server_info.sin_port = htons(9222);
 
     int s_socket = socket(AF_INET, SOCK_STREAM, 0);
     char buffer[1024] = {0};
@@ -26,10 +23,13 @@ int main() {
     socklen_t server_info_len = sizeof(server_info);
 
 	// enable reusing address
-    if(setsockopt(s_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
+    if(setsockopt(s_socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
         printf("Error while setting address for reuse\n");
         return -1;
     }
+    server_info.sin_family = AF_INET;
+    server_info.sin_addr.s_addr = INADDR_ANY;
+    server_info.sin_port = htons(9092);
     
     // int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
     if (bind(s_socket, (struct sockaddr*)&server_info, server_info_len) < 0) {
@@ -44,17 +44,26 @@ int main() {
     }
 
     // int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
-    if ((client = accept(s_socket, (struct sockaddr*)&server_info, &server_info_len) < 0)) {
+    if ((client = accept(s_socket, (struct sockaddr*)&server_info, &server_info_len)) < 0) {
         printf("Error while accepting socket request\n");
         return -1;
     }
 
-    int valread = read(client, buffer, 1024);
-    printf("%s\n", buffer);
+    printf("[%d] Client Connected!\n", client);
 
-    char *hello = "Hello World!\n";
-    send(client, hello, strlen(hello), 0);
-    printf("Hello message sent\n");
+
+    char *hello = "Hello World!";
+    int sendMessage;
+    sendMessage = send(client, hello, strlen(hello), 0);
+    if (sendMessage < 0) {
+        printf("[%d] Error while sending message.\n", sendMessage);
+    }
+
+    printf("message: %s\n", hello);
+
+    // int valread = read(client, buffer, 1024);
+    // printf("%s\n", buffer);
+
     close(client);
 
     return 0;
