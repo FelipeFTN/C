@@ -31,6 +31,9 @@ The Socket project explores network programming using C or C++. It demonstrates 
 ### 9. Challenges
 The Challenges project contains a collection of coding challenges or exercises in C or C++. It offers opportunities to practice and improve your programming skills by solving various problems.
 
+### 10. HTTPServer
+Creating a simple http server using C++ & C (just like Javascript do at the backstage).
+
 ## Contributing
 Contributions to this repository are welcome. If you would like to contribute to any of the projects, please follow the standard GitHub workflow:
 
