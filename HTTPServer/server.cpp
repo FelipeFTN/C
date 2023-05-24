@@ -1,6 +1,7 @@
 #include "server.h"
 
 #include <iostream>
+#include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -76,13 +77,17 @@ int Server::listen_client() {
 }
 
 
-int Server::send_client(const char *response) { // WIP
+int Server::send_client(char *response) {
   if (response == nullptr) {
     response = default_response;
   }
 
-  // Rest of the code for sending the response
-  // ...
+  if ((send(client_socket, response, strlen(response), 0)) < 0) {
+    std::cerr << "Failed to send response to client." << std::endl;
+    close(client_socket);
+    close(server_socket);
+    return -1;
+  }
 
   return 0;
 }

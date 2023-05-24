@@ -8,7 +8,7 @@ public:
   int start_server();
   int stop_server();
   int listen_client();
-  int send_client(const char *response);
+  int send_client(char *response);
 
 private:
   // Sockets
@@ -20,5 +20,5 @@ private:
   int host;
 
   // Response
-  const char* default_response = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\nHello, World!";
+  char* default_response = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\nHello, World!";
 };
