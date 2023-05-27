@@ -1,15 +1,5 @@
 #include "server.h"
 
-#include <iostream>
-#include <string.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <unistd.h>
-#include <cstring>
-#include <cstdlib>
-#include <sys/un.h>
-
 Server::Server() {}
 
 int Server::start_server() {
@@ -26,7 +16,8 @@ int Server::start_server() {
   strcpy(server_addr.sun_path, "/tmp/my_server.sock");
 
   // Bind the socket to the server address
-  if (bind(server_socket, (struct sockaddr*) &server_addr, sizeof(server_addr)) < 0) {
+  if (bind(server_socket, (struct sockaddr *)&server_addr,
+           sizeof(server_addr)) < 0) {
     std::cerr << "Failed to bind socket." << std::endl;
     close(server_socket);
     return -1;
@@ -55,8 +46,9 @@ int Server::listen_client() {
   while (true) {
     // Accept a client connection
     struct sockaddr_un client_addr;
-    socklen_t client_addr_length = sizeof(client_addr); 
-    if ((client_socket = accept(server_socket, (struct sockaddr*) &client_addr, &client_addr_length)) < 0) {
+    socklen_t client_addr_length = sizeof(client_addr);
+    if ((client_socket = accept(server_socket, (struct sockaddr *)&client_addr,
+                                &client_addr_length)) < 0) {
       std::cerr << "Failed to accept client connection." << std::endl;
       close(server_socket);
       return -1;
@@ -76,12 +68,12 @@ int Server::listen_client() {
   return 0;
 }
 
-
-int Server::send_client(char *response) {
-  if (response == nullptr) {
+int Server::send_client(std::string response) {
+  if (response == "") {
     response = default_response;
   }
 
+  // Send a response to the client
   if ((send(client_socket, response, strlen(response), 0)) < 0) {
     std::cerr << "Failed to send response to client." << std::endl;
     close(client_socket);
@@ -89,6 +81,7 @@ int Server::send_client(char *response) {
     return -1;
   }
 
+  std::cout << "Response sent." << std::endl;
+
   return 0;
 }
-
