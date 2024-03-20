@@ -9,6 +9,7 @@
 #include <SDL2/SDL.h>
 
 #include "include/box.h"
+#include "include/structs.h"
 
 int draw_window();
 
@@ -16,18 +17,6 @@ int draw_window();
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 bool drawing = false;
-
-// Box
-const int BOX_WIDTH = 320;
-const int BOX_HEIGHT = 240;
-
-struct Vector2 {
-  Vector2(float x, float y, float fx, float fy) : x(x), y(y), fx(fx), fy(fy) {}
-  float x;
-  float y;
-  float fx;
-  float fy;
-};
 
 int procedural_generation(SDL_Renderer* renderer, SDL_Event event);
 
@@ -52,6 +41,7 @@ int main() {
     bool quit = false;
     SDL_Event event;
     while (quit == false) {
+        SDL_Delay(50);
         SDL_PollEvent(&event);
         if (event.type == SDL_QUIT) quit = true;
 
@@ -77,22 +67,32 @@ int procedural_generation(SDL_Renderer* renderer, SDL_Event event) {
 
     // double x = ((double)rand() / RAND_MAX)*100;
     // double y = ((double)rand() / RAND_MAX)*100;
-    double x = 50;
-    double y = 50;
+    double x = 100;
+    double y = 100;
     double fx = ((double)rand() / RAND_MAX)*100;
     double fy = ((double)rand() / RAND_MAX)*100;
 
     Vector2 offset = Vector2(x, y, fx, fy);
-    printf("x: %f; y: %f\n", offset.x, offset.y);
-    printf("fx: %f; fy: %f\n", offset.fx, offset.fy);
-
-    float slope = (fy - y) / (fx - x);
-    printf("slope: %f\n", slope);
+    // printf("x: %f; y: %f\n", offset.x, offset.y);
+    // printf("fx: %f; fy: %f\n", offset.fx, offset.fy);
+    //
+    // float slope = (fy - y) / (fx - x);
+    // printf("slope: %f\n", slope);
 
     SDL_SetRenderDrawColor(renderer, 100, 100, 255, 255);
-    // SDL_RenderDrawLine(renderer, 100, 100, 200, 200);
-
     SDL_RenderDrawLine(renderer, x, y, fx, fy);
+
+    SDL_SetRenderDrawColor(renderer, 255, 100, 100, 255);
+    int i = 0;
+    Vector2 pixel = get_pixel_vector(i);
+    while (pixel.x != -8.0 && pixel.y != -8.0) {
+        pixel = get_pixel_vector(i);
+        // int dot_color = 100 + (pixel.y * fy) * (pixel.x * fx);
+        int dot_color = (pixel.y * fy) * (pixel.x * fx);
+        SDL_SetRenderDrawColor(renderer, dot_color, dot_color, dot_color, 255);
+        SDL_RenderDrawPoint(renderer, pixel.x, pixel.y);
+        i += 1;
+    }
 
     return 0;
 }
