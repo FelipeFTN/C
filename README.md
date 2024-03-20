@@ -29,7 +29,7 @@ The Login project focuses on implementing a basic login system using C or C++. I
 In this project, you will find an example of procedural generation using C or C++. It demonstrates the generation of random or algorithmic content, such as terrain, mazes, or images.
 Look at this strange/beautiful effect I got when misswritted the math formula:
 
-[![ProceduralGeneration](./ProceduralGeneration/ProceduralGeneration.png)](./ProceduralGeneration/ProceduralGeneration.mp4)
+https://github.com/FelipeFTN/C/assets/80127749/313da8eb-3d96-466c-a7b8-5ca2a96dea4f
 
 ### 7. Quiz
 
