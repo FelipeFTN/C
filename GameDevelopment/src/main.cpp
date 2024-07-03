@@ -1,24 +1,52 @@
-#include "raylib.h"
+#define GLFW_INCLUDE_NONE
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
+#include <stdio.h>
+
+void error_callback(int error, const char* description);
+static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
 
 int main() {
+    if (!glfwInit()) {
+        // Initialization failed
+        glfwTerminate();
+        return -1;
+    }
+    glfwSetErrorCallback(error_callback);
 
-  const int screenWidth = 800;
-  const int screenHeigt = 450;
+    GLFWwindow* window = glfwCreateWindow(640, 480, "Game", NULL, NULL);
+    if (!window) {
+        // Window or OpenGL context creation failed
+        glfwDestroyWindow(window);
+        glfwTerminate();
+        return -1;
+    }
 
-  InitWindow(screenWidth, screenHeigt, "Game");
+    glfwMakeContextCurrent(window);
+    gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
+    // gladLoadGL();
 
-  SetTargetFPS(60);
+    while(!glfwWindowShouldClose(window)) {
+        glfwSetKeyCallback(window, key_callback);
+        // Rendering with OpenGL
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
+        glViewport(0, 0, width, height);
+    }
 
-  while(!WindowShouldClose()) {
+    glfwDestroyWindow(window);
+    glfwTerminate();
 
-    BeginDrawing();
+    return 0;
+}
 
-    DrawText("MyGame!", 350, 200, 20, LIGHTGRAY);
+void error_callback(int error, const char* description) {
+    fprintf(stderr, "[X] Error: %s\n", description);
+}
 
-    EndDrawing();
-  }
-
-  CloseWindow();
-
-  return 0;
+static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+    if ((key == GLFW_KEY_ESCAPE || key == GLFW_KEY_Q) && action == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+    }
 }

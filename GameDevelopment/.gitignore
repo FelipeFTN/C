@@ -1,0 +1,5 @@
+# Remove compiled files
+bin/*
+
+# Remove object files
+**/*.o
